@@ -9,7 +9,7 @@ mongoose-seed lets you populate and clear MongoDB documents with all the benefit
 var seeder = require('mongoose-seed');
 
 // Connect to MongoDB via Mongoose
-seeder.connect('mongodb://localhost/clickstarter-dev', function() {
+seeder.connect('mongodb://localhost/sample-dev', function() {
 	
 	// Load Mongoose models
 	seeder.loadModels([
@@ -19,12 +19,10 @@ seeder.connect('mongodb://localhost/clickstarter-dev', function() {
 
 	// Clear specified collections
 	seeder.clearModels(['Model1', 'Model2'], function() {
-
 		// Callback to populate DB once collections have been cleared
 		seeder.populateModels(data);
 	});
 });
-
 
 // Data array containing seed data - documents organized by Model
 var data = [
