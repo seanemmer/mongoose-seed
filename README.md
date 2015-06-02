@@ -1,6 +1,6 @@
 # mongoose-seed
 
-mongoose-seed lets you populate and clear MongoDB documents with all the benefits of Mongoose validation.  
+mongoose-seed lets you populate and clear MongoDB documents with all the benefits of Mongoose validation
 
 ## Basic example
 
@@ -19,8 +19,10 @@ seeder.connect('mongodb://localhost/sample-dev', function() {
 
 	// Clear specified collections
 	seeder.clearModels(['Model1', 'Model2'], function() {
+
 		// Callback to populate DB once collections have been cleared
 		seeder.populateModels(data);
+
 	});
 });
 
