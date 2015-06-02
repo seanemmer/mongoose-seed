@@ -6,24 +6,25 @@ mongoose-seed lets you seed your MongoDB with all the benefits of mongoose valid
 
 ```javascript
 
-var db = 'mongodb://localhost/clickstarter-dev'
-var modelFiles = [
-	'app/model1File.js',
-	'app/model2File.js'
-]
-
-seeder.connect(db, function() {
+// Connect to MongoDB via Mongoose
+seeder.connect('mongodb://localhost/clickstarter-dev', function() {
 	
-	seeder.loadModels(modelFiles);
+	// Load Mongoose models
+	seeder.loadModels([
+		'app/model1File.js',
+		'app/model2File.js'
+	]);
 
+	// Clear specified collections
 	seeder.clearModels(['Model1', 'Model2'], function() {
+
 		// Callback to populate DB once collections have been cleared
 		seeder.populateModels(data);
 	});
 });
 
 
-// Data array containing seed documents organized by model
+// Data array containing seed data - documents organized by Model
 var data = [
 	{ 
 		'model': 'Model1',
@@ -45,9 +46,24 @@ var data = [
 
 ## Methods
 
-### seeder.loadModels
+### seeder.connect(db, [callback])
 
-### seeder.clearModels
+Initializes connection to MongoDB via Mongoose singleton
 
-### seeder.populateModels
+---------------------------------------
 
+### seeder.loadModels(filePaths)
+
+Loads mongoose models into Mongoose singleton.  *Only Models that have been loaded can be cleared or populated.*
+
+---------------------------------------
+
+### seeder.clearModels(modelArray, [callback])
+
+Clears DB collection specified by each model in modelArray.  Callback is executed after DB is cleared (useful for populateModels method)
+
+---------------------------------------
+
+### seeder.populateModels(dataArray)
+
+Populates MongoDB with documents in dataArray.  dataArray consists of objects with 'model' and 'documents' keys, where 'documents' is an array of valid collection documents.  Note that Mongoose Schema validation *is* enforced.
