@@ -50,7 +50,7 @@ var data = [
 
 ### seeder.connect(db, [callback])
 
-Initializes connection to MongoDB via Mongoose singleton
+Initializes connection to MongoDB via Mongoose singleton.
 
 ---------------------------------------
 
