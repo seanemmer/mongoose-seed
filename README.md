@@ -1,10 +1,12 @@
 # mongoose-seed
 
-mongoose-seed lets you seed your MongoDB with all the benefits of mongoose validation.  
+mongoose-seed lets you populate and clear MongoDB documents with all the benefits of Mongoose validation.  
 
 ## Basic example
 
 ```javascript
+
+var seeder = require('mongoose-seed');
 
 // Connect to MongoDB via Mongoose
 seeder.connect('mongodb://localhost/clickstarter-dev', function() {
