@@ -1,6 +1,6 @@
 {
   "name": "mongoose-seed",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "Seed data population for Mongoose",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,7 @@
   "keywords": [
     "mongoose",
     "seed",
+    "mongo",
     "mongodb",
     "node",
     "node.js",
