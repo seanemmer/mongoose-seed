@@ -69,7 +69,7 @@ Seeder.prototype.clearModels = function(models, cb) {
 	}
 
 	// Confirm that all Models have been registered in Mongoose
-	var invalidModels = this.invalidModelCheck(modelNames, function(err) {
+	this.invalidModelCheck(modelNames, function(err) {
 		if (err) {
 			console.error(chalk.red('Error: ' + err.message));
 			return;
