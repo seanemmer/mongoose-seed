@@ -10,7 +10,7 @@ var seeder = require('mongoose-seed');
 
 // Connect to MongoDB via Mongoose
 seeder.connect('mongodb://localhost/sample-dev', function() {
-	
+
 	// Load Mongoose models
 	seeder.loadModels([
 		'app/model1File.js',
@@ -28,7 +28,7 @@ seeder.connect('mongodb://localhost/sample-dev', function() {
 
 // Data array containing seed data - documents organized by Model
 var data = [
-	{ 
+	{
 		'model': 'Model1',
 		'documents': [
 			{
@@ -41,7 +41,7 @@ var data = [
 			}
 		]
 	}
-];	
+];
 
 
 ```
@@ -66,6 +66,6 @@ Clears DB collection specified by each model in modelArray.  Callback is execute
 
 ---------------------------------------
 
-### seeder.populateModels(dataArray)
+### seeder.populateModels(dataArray, [callback])
 
 Populates MongoDB with documents in dataArray.  dataArray consists of objects with 'model' and 'documents' keys, where 'documents' is an array of valid collection documents.  Note that Mongoose Schema validation *is* enforced.
