@@ -25,7 +25,7 @@ Seeder.prototype.connect = function(db, cb) {
 			console.log('Successfully initialized mongoose-seed');
 			cb();
 		}
-	});	
+	});
 };
 
 Seeder.prototype.loadModels = function(modelPaths) {
@@ -37,13 +37,13 @@ Seeder.prototype.loadModels = function(modelPaths) {
 
 Seeder.prototype.invalidModelCheck = function(models, cb) {
 	var invalidModels = [];
-	
+
 	models.forEach(function(model) {
 		if(_.indexOf(mongoose.modelNames(), model) === -1) {
 			invalidModels.push(model);
 		}
 	});
-	
+
 	if (invalidModels.length) {
 		cb(new Error('Models not registered in Mongoose: ' + invalidModels));
 	} else {
@@ -94,7 +94,7 @@ Seeder.prototype.clearModels = function(models, cb) {
 	});
 };
 
-Seeder.prototype.populateModels = function(seedData) {
+Seeder.prototype.populateModels = function(seedData, cb) {
 	if(!this.connected) {
 		return new Error('Not connected to db, exiting function');
 	}
@@ -122,8 +122,8 @@ Seeder.prototype.populateModels = function(seedData) {
 				});
 			});
 		});
-
 	});
+	cb();
 };
 
 module.exports = new Seeder();
