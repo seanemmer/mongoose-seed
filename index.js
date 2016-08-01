@@ -122,22 +122,27 @@ Seeder.prototype.populateModels = function(seedData, cb) {
 			return;
 		}
 
+		var totalEntries = 0;
+		var processedEntries = 0;
 		// Populate each model
 		seedData.forEach(function(entry) {
 			var Model = mongoose.model(entry.model);
+			totalEntries += entry.documents.length;
 			entry.documents.forEach(function(document, j) {
 				Model.create(document, function(err) {
 					if (err) {
 						console.error(chalk.red('Error creating document [' + j + '] of ' + entry.model + ' model'));
 						console.error(chalk.red('Error: ' + err.message));
-						return;
+					} else {
+						console.log('Successfully created document [' + j + '] of ' + entry.model + ' model');
 					}
-					console.log('Successfully created document [' + j + '] of ' + entry.model + ' model');
+					if (++processedEntries == totalEntries) {
+						cb();
+					}
 				});
 			});
 		});
 	});
-	cb();
 };
 
 module.exports = new Seeder();
