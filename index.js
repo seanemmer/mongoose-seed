@@ -123,21 +123,25 @@ Seeder.prototype.populateModels = function(seedData, cb) {
 		}
 
 		// Populate each model
-		seedData.forEach(function(entry) {
+		async.eachOf(seedData, function(entry, i, outerCallback) {
 			var Model = mongoose.model(entry.model);
-			entry.documents.forEach(function(document, j) {
+			async.eachOf(entry.documents, function(document, j, innerCallback) {
 				Model.create(document, function(err) {
 					if (err) {
 						console.error(chalk.red('Error creating document [' + j + '] of ' + entry.model + ' model'));
 						console.error(chalk.red('Error: ' + err.message));
-						return;
+					} else {
+						console.log('Successfully created document [' + j + '] of ' + entry.model + ' model');
 					}
-					console.log('Successfully created document [' + j + '] of ' + entry.model + ' model');
+					innerCallback();
 				});
+			}, function(err) {
+				outerCallback();
 			});
+		}, function(err) {
+			cb();
 		});
 	});
-	cb();
 };
 
 module.exports = new Seeder();
