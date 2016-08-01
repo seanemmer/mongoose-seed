@@ -122,13 +122,10 @@ Seeder.prototype.populateModels = function(seedData, cb) {
 			return;
 		}
 
-		var totalEntries = 0;
-		var processedEntries = 0;
 		// Populate each model
-		seedData.forEach(function(entry) {
+		async.eachOf(seedData, function(entry, i, outerCallback) {
 			var Model = mongoose.model(entry.model);
-			totalEntries += entry.documents.length;
-			entry.documents.forEach(function(document, j) {
+			async.eachOf(entry.documents, function(document, j, innerCallback) {
 				Model.create(document, function(err) {
 					if (err) {
 						console.error(chalk.red('Error creating document [' + j + '] of ' + entry.model + ' model'));
@@ -136,11 +133,13 @@ Seeder.prototype.populateModels = function(seedData, cb) {
 					} else {
 						console.log('Successfully created document [' + j + '] of ' + entry.model + ' model');
 					}
-					if (++processedEntries == totalEntries) {
-						cb();
-					}
+					innerCallback();
 				});
+			}, function(err) {
+				outerCallback();
 			});
+		}, function(err) {
+			cb();
 		});
 	});
 };
