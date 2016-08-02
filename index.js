@@ -45,7 +45,10 @@ Seeder.prototype.connect = function(db, cb) {
 Seeder.prototype.loadModels = function(modelPaths) {
 	console.log(modelPaths);
 	modelPaths.forEach(function(modelPath) {
-		require(path.resolve(modelPath));
+		  var model = require(path.resolve(modelPath));
+      if (model instanceof Function) {
+          model();
+      }
 	});
 };
 
