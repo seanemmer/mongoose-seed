@@ -1,9 +1,5 @@
-var chai = require('chai'),
-    app = require('../index'),
-    mongoose = require('mongoose');
+var chai = require('chai');
 
-global.app = app;
 global.expect = chai.expect;
 global.should = chai.should();
 global.assert = chai.assert;
-global.mongoose = mongoose;
