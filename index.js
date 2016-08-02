@@ -148,23 +148,3 @@ Seeder.prototype.populateModels = function(seedData, cb) {
 };
 
 module.exports = new Seeder();
-       async.eachOf(entry.documents, function(document, j, innerCallback) {
-                Model.create(document, function(err) {
-                    if (err) {
-                        console.error(chalk.red('Error creating document [' + j + '] of ' + entry.model + ' model'));
-                        console.error(chalk.red('Error: ' + err.message));
-                    } else {
-                        console.log('Successfully created document [' + j + '] of ' + entry.model + ' model');
-                    }
-                    innerCallback();
-                });
-            }, function(err) {
-                outerCallback();
-            });
-        }, function(err) {
-            cb();
-        });
-    });
-};
-
-module.exports = new Seeder();
