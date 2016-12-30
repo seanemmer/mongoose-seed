@@ -24,22 +24,23 @@ Seeder.prototype.connect = function(db, cb) {
 		}
 		source http://mongoosejs.com/docs/api.html#connection_Connection-readyState
 	*/
-    if (mongoose.connection.readyState == 1) {
+    if (mongoose.connection.readyState === 1) {
         _this.connected = true;
         console.log('Successfully initialized mongoose-seed');
         cb();
+    } else {
+        mongoose.connect(db, function(err) {
+            // Log Error
+            if (err) {
+                console.error(chalk.red('Could not connect to MongoDB!'));
+                console.log(err);
+            } else {
+                _this.connected = true;
+                console.log('Successfully initialized mongoose-seed');
+                cb();
+            }
+        });
     }
-    mongoose.connect(db, function(err) {
-        // Log Error
-        if (err) {
-            console.error(chalk.red('Could not connect to MongoDB!'));
-            console.log(err);
-        } else {
-            _this.connected = true;
-            console.log('Successfully initialized mongoose-seed');
-            cb();
-        }
-    });
 };
 
 Seeder.prototype.loadModels = function(modelPaths) {
