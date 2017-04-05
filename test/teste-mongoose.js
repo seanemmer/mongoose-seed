@@ -20,6 +20,17 @@ describe('Mongoose-Seeder', function() {
 
     });
 
+    it('passes connection options', function (done) {
+        var connection_options = {
+            reconnectTries: 3,
+            reconnectInterval: 1000
+        };
+        seeder.connect(connection_url, connection_options, function () {
+            expect(mongoose.connection.readyState).to.equal(1);
+            done();
+        });
+    });
+    
     it('Load Models', function(done) {
         seeder.connect(connection_url, function() {
             seeder.loadModels(['test/testModel.js']);

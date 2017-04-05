@@ -21,7 +21,9 @@ seeder.connect('mongodb://localhost/sample-dev', function() {
 	seeder.clearModels(['Model1', 'Model2'], function() {
 
 		// Callback to populate DB once collections have been cleared
-		seeder.populateModels(data);
+		seeder.populateModels(data, function() {
+			//seeder.disconnect();
+		});
 
 	});
 });
