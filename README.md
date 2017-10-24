@@ -11,21 +11,21 @@ var seeder = require('mongoose-seed');
 // Connect to MongoDB via Mongoose
 seeder.connect('mongodb://localhost/sample-dev', function() {
 
-	// Load Mongoose models
-	seeder.loadModels([
-		'app/model1File.js',
-		'app/model2File.js'
-	]);
+  // Load Mongoose models
+  seeder.loadModels([
+    'app/model1File.js',
+    'app/model2File.js'
+  ]);
 
-	// Clear specified collections
-	seeder.clearModels(['Model1', 'Model2'], function() {
+  // Clear specified collections
+  seeder.clearModels(['Model1', 'Model2'], function() {
 
-		// Callback to populate DB once collections have been cleared
-		seeder.populateModels(data, function() {
-			//seeder.disconnect();
-		});
+    // Callback to populate DB once collections have been cleared
+    seeder.populateModels(data, function() {
+      seeder.disconnect();
+    });
 
-	});
+  });
 });
 
 // Data array containing seed data - documents organized by Model
@@ -44,8 +44,6 @@ var data = [
 		]
 	}
 ];
-
-
 ```
 
 ## Methods
@@ -71,3 +69,10 @@ Clears DB collection specified by each model in modelArray.  Callback is execute
 ### seeder.populateModels(dataArray, [callback])
 
 Populates MongoDB with documents in dataArray.  dataArray consists of objects with 'model' and 'documents' keys, where 'documents' is an array of valid collection documents.  Note that Mongoose Schema validation *is* enforced.
+
+---
+
+### seeder.disconnect()
+
+Disconnects mongoose db-handle. Use it inside `populateModels` callback to cleanly exit the program
+(see example above).
