@@ -34,11 +34,11 @@ var data = [
 		'model': 'Model1',
 		'documents': [
 			{
-				'name': 'Doc1'
+				'name': 'Doc1',
 				'value': 200
 			},
 			{
-				'name': 'Doc2'
+				'name': 'Doc2',
 				'value': 400
 			}
 		]
