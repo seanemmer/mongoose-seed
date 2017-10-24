@@ -29,20 +29,21 @@ seeder.connect('mongodb://localhost/sample-dev', function() {
 });
 
 // Data array containing seed data - documents organized by Model
-var data = [{
-  'model': 'Model1',
-  'documents': [
-    {
-      'name': 'Doc1'
-      'value': 200
-    },
-    {
-      'name': 'Doc2'
-      'value': 400
-    }
-  ]
-}];
-
+var data = [
+	{
+		'model': 'Model1',
+		'documents': [
+			{
+				'name': 'Doc1',
+				'value': 200
+			},
+			{
+				'name': 'Doc2',
+				'value': 400
+			}
+		]
+	}
+];
 ```
 
 ## Methods
