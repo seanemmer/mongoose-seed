@@ -16,15 +16,6 @@ function Seeder() {
 
 Seeder.prototype.connect = function(...params) {
     var _this = this;
-    /*
-		switch (mongoose.connection.readyState) {
-			case 0 : Disconnected;
-			case 1 : Connected;
-			case 2 : Connecting;
-			case 3 : Disconnecting;
-		}
-		source http://mongoosejs.com/docs/api.html#connection_Connection-readyState
-	*/
 
     var db, cb = null;
     var opts = [];
