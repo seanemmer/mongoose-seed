@@ -6,6 +6,7 @@
 var _ = require('lodash'),
     async = require('async'),
     mongoose = require('mongoose'),
+    Promise = require('bluebird'),
     chalk = require('chalk'),
     path = require('path');
 
@@ -15,29 +16,23 @@ function Seeder() {
 
 Seeder.prototype.connect = function(...params) {
     var _this = this;
-    /*
-		switch (mongoose.connection.readyState) {
-			case 0 : Disconnected;
-			case 1 : Connected;
-			case 2 : Connecting;
-			case 3 : Disconnecting;
-		}
-		source http://mongoosejs.com/docs/api.html#connection_Connection-readyState
-	*/
 
-    var db, cb, opts = null;
+    var db, cb = null;
+    var opts = [];
 
     if (params.length == 2) {
         db = params[0];
         cb = params[1];
     } else if (params.length == 3) {
         db = params[0];
-        opts = params[1]; 
-        cb = params[2]; 
+        opts = params[1];
+        cb = params[2];
     } else {
-        console.error('Pass either 2 or 3 arguments to seeder.connect'); 
+        console.error('Pass either 2 or 3 arguments to seeder.connect');
         process.exit(1);
     }
+    opts.promiseLibrary = Promise;
+
 
     if (mongoose.connection.readyState === 1) {
         _this.connected = true;
@@ -121,14 +116,15 @@ Seeder.prototype.clearModels = function(models, cb) {
         // Clear each model
         async.each(modelNames, function(modelName, done) {
             var Model = mongoose.model(modelName);
-            Model.remove({}, function(err) {
-                if (err) {
-                    console.error(chalk.red('Error: ' + err.message));
-                    return;
-                }
-                console.log(modelName + 's collection cleared');
+            Model.remove({})
+              .then(function() {
                 done();
-            });
+                console.log(modelName + 's collection cleared');
+              })
+              .catch(function(err) {
+                console.error(chalk.red('Error: ' + err.message));
+                return;
+              });
         }, function(err) {
             // Final async callback
             if (err) {
@@ -157,15 +153,16 @@ Seeder.prototype.populateModels = function(seedData, cb) {
         async.eachOf(seedData, function(entry, i, outerCallback) {
             var Model = mongoose.model(entry.model);
             async.eachOf(entry.documents, function(document, j, innerCallback) {
-                Model.create(document, function(err) {
-                    if (err) {
-                        console.error(chalk.red('Error creating document [' + j + '] of ' + entry.model + ' model'));
-                        console.error(chalk.red('Error: ' + err.message));
-                    } else {
-                        console.log('Successfully created document [' + j + '] of ' + entry.model + ' model');
-                    }
-                    innerCallback();
-                });
+              Model.create(document)
+                .then(function() {
+                  console.log('Successfully created document [' + j + '] of ' + entry.model + ' model');
+                  innerCallback();
+                })
+                .catch(function(err) {
+                  console.error(chalk.red('Error creating document [' + j + '] of ' + entry.model + ' model'));
+                  console.error(chalk.red('Error: ' + err.message));
+                  innerCallback();
+                })
             }, function(err) {
                 outerCallback();
             });
@@ -180,3 +177,4 @@ Seeder.prototype.disconnect = function disconnect() {
 };
 
 module.exports = new Seeder();
+
