@@ -175,7 +175,7 @@ Seeder.prototype.populateModels = function(seedData, cb) {
     });
 };
 
-Seeder.prototype.disconnect = function disconnect() {
+Seeder.prototype.disconnect = function () {
   mongoose.disconnect();
 };
 
