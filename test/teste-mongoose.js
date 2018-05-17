@@ -78,4 +78,46 @@ describe('Mongoose-Seeder', function() {
 
     });
 
+    it('check no debug output', function(done) {
+        var outputDone = false;
+        var consoleOutput = '';
+        var originalLog = console.log;
+
+        console.log = function (message) {
+            outputDone = true;
+            consoleOutput += message;
+        };
+
+        seeder.setLogOutput(false);
+        seeder.connect(connection_url, function () {
+            expect(consoleOutput).to.equal('');
+            expect(outputDone).to.be.false;
+
+            seeder.setLogOutput(true);
+            console.log = originalLog;
+            done();
+        });
+
+    });
+
+    it('check debug output', function(done) {
+        var outputDone = false;
+        var consoleOutput = '';
+        var originalLog = console.log;
+
+        console.log = function (message) {
+            outputDone = true;
+            consoleOutput += message;
+        };
+
+        seeder.connect(connection_url, function () {
+            expect(outputDone).to.be.true;
+            expect(consoleOutput).to.equal('Successfully initialized mongoose-seed');
+
+            console.log = originalLog;
+            done();
+        });
+
+    });
+
 });
