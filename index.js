@@ -11,7 +11,18 @@ var _ = require('lodash'),
 
 function Seeder() {
     this.connected = false;
+    this.consoleLogEnabled = true;
 }
+
+function consoleLog(_this, message) {
+    if (_this.consoleLogEnabled !== undefined && _this.consoleLogEnabled === true) {
+        console.log(message);
+    }
+}
+
+Seeder.prototype.setLogOutput = function (logOutput) {
+    this.consoleLogEnabled = logOutput;
+};
 
 Seeder.prototype.connect = function(...params) {
     var _this = this;
@@ -41,7 +52,7 @@ Seeder.prototype.connect = function(...params) {
 
     if (mongoose.connection.readyState === 1) {
         _this.connected = true;
-        console.log('Successfully initialized mongoose-seed');
+        consoleLog(_this, 'Successfully initialized mongoose-seed');
         cb();
     } else {
         if (opts) {
@@ -60,16 +71,16 @@ function afterConnect(_this, err, cb) {
     // Log Error
     if (err) {
         console.error(chalk.red('Could not connect to MongoDB!'));
-        console.log(err);
+        consoleLog(_this, err);
     } else {
         _this.connected = true;
-        console.log('Successfully initialized mongoose-seed');
+        consoleLog(_this, 'Successfully initialized mongoose-seed');
         cb();
     }
 }
 
 Seeder.prototype.loadModels = function(modelPaths) {
-    console.log(modelPaths);
+    consoleLog(this, modelPaths);
     modelPaths.forEach(function(modelPath) {
         var model = require(path.resolve(modelPath));
         if (model instanceof Function) {
@@ -100,6 +111,7 @@ Seeder.prototype.clearModels = function(models, cb) {
     }
 
     var modelNames = [];
+    var _this = this;
 
     // Convert to array if not already
     if (Array.isArray(models)) {
@@ -126,7 +138,7 @@ Seeder.prototype.clearModels = function(models, cb) {
                     console.error(chalk.red('Error: ' + err.message));
                     return;
                 }
-                console.log(modelName + 's collection cleared');
+                consoleLog(_this, modelName + 's collection cleared');
                 done();
             });
         }, function(err) {
@@ -145,6 +157,7 @@ Seeder.prototype.populateModels = function(seedData, cb) {
     }
 
     var modelNames = _.unique(_.pluck(seedData, 'model'));
+    var _this = this;
 
     // Confirm that all Models have been registered in Mongoose
     var invalidModels = this.invalidModelCheck(modelNames, function(err) {
@@ -162,7 +175,7 @@ Seeder.prototype.populateModels = function(seedData, cb) {
                         console.error(chalk.red('Error creating document [' + j + '] of ' + entry.model + ' model'));
                         console.error(chalk.red('Error: ' + err.message));
                     } else {
-                        console.log('Successfully created document [' + j + '] of ' + entry.model + ' model');
+                        consoleLog(_this, 'Successfully created document [' + j + '] of ' + entry.model + ' model');
                     }
                     innerCallback();
                 });
