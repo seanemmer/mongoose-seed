@@ -20,8 +20,8 @@ function consoleLog(_this, message) {
     }
 }
 
-Seeder.prototype.setLogOutput = function (value) {
-    this.consoleLogEnabled = value;
+Seeder.prototype.setLogOutput = function (logOutput) {
+    this.consoleLogEnabled = logOutput;
 };
 
 Seeder.prototype.connect = function(...params) {

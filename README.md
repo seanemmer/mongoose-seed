@@ -76,3 +76,9 @@ Populates MongoDB with documents in dataArray.  dataArray consists of objects wi
 
 Disconnects mongoose db-handle. Use it inside `populateModels` callback to cleanly exit the program
 (see example above).
+
+---
+
+### seeder.setLogOutput(logOutput)
+
+Disables or enables calls to `console.log`. If `false` is passed, only errors will be print to console.
