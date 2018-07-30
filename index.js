@@ -156,7 +156,7 @@ Seeder.prototype.populateModels = function(seedData, cb) {
         return new Error('Not connected to db, exiting function');
     }
 
-    var modelNames = _.unique(_.pluck(seedData, 'model'));
+    var modelNames = _.uniq(_.map(seedData, 'model'));
     var _this = this;
 
     // Confirm that all Models have been registered in Mongoose
