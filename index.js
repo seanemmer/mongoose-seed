@@ -44,6 +44,7 @@ function consoleLog(_this, message) {
  */
 Seeder.prototype.setPromise = function (promise) {
    this.promise = promise;
+   mongoose.Promise = this.promise;
 };
 
 Seeder.prototype.setLogOutput = function (logOutput) {
@@ -79,7 +80,7 @@ Seeder.prototype.connect = function(database, options = {}, callback = null) {
         afterConnect(_this, error, callback);
       });
     } else {
-      return new Promise(function(resolve, reject) {
+      return new this.promise(function(resolve, reject) {
         if (mongoose.connection.readyState === STATES.Connecting) {
           consoleLog(_this, 'Successfully initialized mongoose-seed');
           return resolve();
