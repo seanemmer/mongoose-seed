@@ -48,9 +48,10 @@ var data = [
 
 ## Methods
 
-### seeder.connect(db, [callback])
+### seeder.connect(db, [options], [callback])
 
-Initializes connection to MongoDB via Mongoose singleton.
+Initializes connection to MongoDB via Mongoose singleton.  
+If callback is not supplied, a promise will be returned.
 
 ---------------------------------------
 
@@ -82,3 +83,9 @@ Disconnects mongoose db-handle. Use it inside `populateModels` callback to clean
 ### seeder.setLogOutput(logOutput)
 
 Disables or enables calls to `console.log`. If `false` is passed, only errors will be print to console.
+
+---
+
+### seeder.setPromise(PromiseConstructor)
+
+Changes promise library used by the seeder (and in turn the underlying mongoose library).
