@@ -120,4 +120,14 @@ describe('Mongoose-Seeder', function() {
 
     });
 
+    it('returns a promise', function() {
+        let promise = seeder.connect(connection_url).catch(function(error) {});
+        expect(promise).to.be.a('promise');
+    });
+
+  it('check mongoose connection after promise', async function() {
+    await seeder.connect(connection_url);
+    expect(mongoose.connection.readyState).to.equal(1);
+  });
+
 });

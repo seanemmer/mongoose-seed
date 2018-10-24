@@ -9,9 +9,27 @@ var _ = require('lodash'),
     chalk = require('chalk'),
     path = require('path');
 
+/*
+switch (mongoose.connection.readyState) {
+  case 0 : Disconnected;
+  case 1 : Connected;
+  case 2 : Connecting;
+  case 3 : Disconnecting;
+}
+source http://mongoosejs.com/docs/api.html#connection_Connection-readyState
+*/
+
+var STATES = {
+  Disconnected: 0,
+  Connected: 1,
+  Connecting: 2,
+  Disconnecting: 3
+};
+
 function Seeder() {
     this.connected = false;
     this.consoleLogEnabled = true;
+    this.promise = Promise;
 }
 
 function consoleLog(_this, message) {
@@ -20,50 +38,57 @@ function consoleLog(_this, message) {
     }
 }
 
+/**
+ * Set promise type to use, defaults to normal ES6 Promise.
+ * @param {Object} promise Promise constructor.
+ */
+Seeder.prototype.setPromise = function (promise) {
+   this.promise = promise;
+};
+
 Seeder.prototype.setLogOutput = function (logOutput) {
     this.consoleLogEnabled = logOutput;
 };
 
-Seeder.prototype.connect = function(...params) {
+/**
+ *
+ * @param {string} database Connection string.
+ * @param {function} [callback} Optional callback to fire, if unset, a promise is returned.
+ * @param {Object} [options] Optional MongoDb options.
+ * @return {Promise|null}
+ */
+Seeder.prototype.connect = function(database, options = {}, callback = null) {
     var _this = this;
-    /*
-		switch (mongoose.connection.readyState) {
-			case 0 : Disconnected;
-			case 1 : Connected;
-			case 2 : Connecting;
-			case 3 : Disconnecting;
-		}
-		source http://mongoosejs.com/docs/api.html#connection_Connection-readyState
-	*/
 
-    var db, cb, opts = null;
-
-    if (params.length == 2) {
-        db = params[0];
-        cb = params[1];
-    } else if (params.length == 3) {
-        db = params[0];
-        opts = params[1]; 
-        cb = params[2]; 
-    } else {
-        console.error('Pass either 2 or 3 arguments to seeder.connect'); 
-        process.exit(1);
+    if (typeof options === 'function') {
+        var oldOptions = options;
+        options = (callback ? callback : {});
+        callback = oldOptions;
     }
 
-    if (mongoose.connection.readyState === 1) {
-        _this.connected = true;
+    options.useMongoClient = true;
+
+    if (callback !== null) {
+      if (mongoose.connection.readyState === STATES.Connecting) {
         consoleLog(_this, 'Successfully initialized mongoose-seed');
-        cb();
+        callback();
+        return;
+      }
+
+      mongoose.connect(database, options, function (error) {
+        afterConnect(_this, error, callback);
+      });
     } else {
-        if (opts) {
-            mongoose.connect(db, opts, function (err) {
-                afterConnect(_this, err, cb);
-            });
-        } else {
-            mongoose.connect(db, function (err) {
-                afterConnect(_this, err, cb);
-            });
+      return new Promise(function(resolve, reject) {
+        if (mongoose.connection.readyState === STATES.Connecting) {
+          consoleLog(_this, 'Successfully initialized mongoose-seed');
+          return resolve();
         }
+        return mongoose.connect(database, options).then(function() {
+          _this.connected = true;
+          resolve();
+        });
+      });
     }
 };
 
