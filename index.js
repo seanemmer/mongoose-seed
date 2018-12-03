@@ -49,7 +49,10 @@ Seeder.prototype.connect = function(...params) {
         console.error('Pass either 2 or 3 arguments to seeder.connect'); 
         process.exit(1);
     }
-
+    
+    mongoose.set("useCreateIndex", true);
+    mongoose.set("useNewUrlParser", true);
+    
     if (mongoose.connection.readyState === 1) {
         _this.connected = true;
         consoleLog(_this, 'Successfully initialized mongoose-seed');
@@ -133,7 +136,7 @@ Seeder.prototype.clearModels = function(models, cb) {
         // Clear each model
         async.each(modelNames, function(modelName, done) {
             var Model = mongoose.model(modelName);
-            Model.remove({}, function(err) {
+            Model.deleteMany({}, function(err) {
                 if (err) {
                     console.error(chalk.red('Error: ' + err.message));
                     return;
