@@ -4,7 +4,7 @@
   "description": "Seed data population for Mongoose",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/**/*.js"
+    "test": "mocha --exit test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -28,14 +28,14 @@
   },
   "homepage": "https://github.com/seanemmer/mongoose-seed#readme",
   "dependencies": {
-    "async": "~1.2.0",
-    "chalk": "~1.0.0",
-    "lodash": "~4.17.10",
-    "path": "~0.11.14"
+    "async": "~2.6.1",
+    "chalk": "~2.4.2",
+    "lodash": "~4.17.11",
+    "path": "~0.12.7"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^3.0.0",
-    "mongoose": "^4.5.8"
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "mongoose": "^5.4.8"
   }
 }
