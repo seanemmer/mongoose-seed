@@ -43,10 +43,10 @@ Seeder.prototype.connect = function(...params) {
         cb = params[1];
     } else if (params.length == 3) {
         db = params[0];
-        opts = params[1]; 
-        cb = params[2]; 
+        opts = params[1];
+        cb = params[2];
     } else {
-        console.error('Pass either 2 or 3 arguments to seeder.connect'); 
+        console.error('Pass either 2 or 3 arguments to seeder.connect');
         process.exit(1);
     }
     
@@ -59,14 +59,16 @@ Seeder.prototype.connect = function(...params) {
         cb();
     } else {
         if (opts) {
-            mongoose.connect(db, opts, function (err) {
-                afterConnect(_this, err, cb);
-            });
+            opts.useNewUrlParser = true;
         } else {
-            mongoose.connect(db, function (err) {
-                afterConnect(_this, err, cb);
-            });
+            opts = {
+                useNewUrlParser: true
+            };
         }
+
+        mongoose.connect(db, opts, function (err) {
+            afterConnect(_this, err, cb);
+        });
     }
 };
 
