@@ -9,6 +9,8 @@ var _ = require('lodash'),
     chalk = require('chalk'),
     path = require('path');
 
+mongoose.set('useCreateIndex', true);
+
 function Seeder() {
     this.connected = false;
     this.consoleLogEnabled = true;
