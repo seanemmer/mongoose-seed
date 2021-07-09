@@ -84,12 +84,12 @@ function afterConnect(_this, err, cb) {
     }
 }
 
-Seeder.prototype.loadModels = function(modelPaths) {
+Seeder.prototype.loadModels = function(modelPaths, ...modelArgs) {
     consoleLog(this, modelPaths);
     modelPaths.forEach(function(modelPath) {
         var model = require(path.resolve(modelPath));
         if (model instanceof Function) {
-            model();
+            model(...modelArgs);
         }
     });
 };
