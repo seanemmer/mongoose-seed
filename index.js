@@ -50,9 +50,6 @@ Seeder.prototype.connect = function(...params) {
         process.exit(1);
     }
     
-    mongoose.set("useCreateIndex", true);
-    mongoose.set("useNewUrlParser", true);
-    
     if (mongoose.connection.readyState === 1) {
         _this.connected = true;
         consoleLog(_this, 'Successfully initialized mongoose-seed');
