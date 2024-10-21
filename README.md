@@ -2,6 +2,10 @@
 
 mongoose-seed lets you populate and clear MongoDB documents with all the benefits of Mongoose validation
 
+## Deprecated
+
+note this repository is no longer maintained.  please contact the author if you're interested in taking over this project
+
 ## Basic example
 
 ```javascript
